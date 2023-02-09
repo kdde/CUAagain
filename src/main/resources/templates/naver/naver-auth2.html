@@ -1,51 +1,81 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Insert title here</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script th:inline="javascript">
-    
-    $(function(){
-		/*
-		var code=`[[${code}]]`;
-		var client_id=`[[${client_id}]]`;
-		var client_secret=`[[${client_secret}]]`;
-		var grant_type="authorization_code";
-		
-		//console.log(code);
-		//console.log(client_id);
-		//console.log(client_secret);
-		
-		$.ajax({
-			url:"https://auth.worksmobile.com/oauth2/v2.0/token",
-			type:"post",
-			//contentType:"application/x-www-form-urlencoded",
-			data:{
-				code:code,
-				grant_type: grant_type,
-				client_id:client_id,
-				client_secret:client_secret				
-				},
-			success: function(result){
-				console.log("-----------------");
-				console.log(result);
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/commons/common.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+	$(function(){
+		$.each($(".group"),function(index,item){
+			if($(item).children().length == 0){
+				$(item).remove();
 			}
 			
-		});
-		//*/
+		})
 		
 	});
-    </script>
-    
+</script>
+<style>
+.parent-node,
+.group{
+	position: relative;
+	margin-left: 12px;
+}
+.tree-node{
+	padding-left: 12px;
+	position: relative;
+}
+.node a{
+	display: block;
+	height: 54px;
+	line-height: 54px;
+	padding-left: 24px;
+	background-image: url("/image/icon/ico-file-fold.svg");
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+.tree-node a:before{
+	content: '';
+    position: absolute;
+    left: 0;
+    top: 1.7em;
+    bottom: 1px;
+    z-index: 2;
+    width: 12px;
+    height: 0;
+    margin-top: -1px;
+    border-top: 1px solid #222;
+}
+.group:before{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -28px;
+    height: 100%;
+    bottom: 1px;
+    z-index: -1;
+    width: 0;
+    border-left: 1px solid #222;
+}
+	
+</style>
 </head>
 <body>
-    <table>
-    	<tr th:each="dto:${list}">
-    		<td th:text="${dto.orgUnitId}"></td>
-    		<td th:text="${dto.orgUnitName}"></td>
-    		<td th:text="${dto.parentOrgUnitId}"></td>
-    	</tr>
-    </table>
+	<ul class="parent-node">
+		<li class="node"th:each="dto1:${naver}" th:if="${#strings.isEmpty(dto1.parentOrgUnitId)}" >
+			<a th:text="${dto1.orgUnitName}"></a>
+			<ol class="group">
+				<li class="tree-node node" th:each="dto2:${naver}" th:if="${dto1.orgUnitId eq dto2.parentOrgUnitId}" >
+					<a th:text="${dto2.orgUnitName}" ></a>
+					<ul class="group">
+						<li class="tree-node node" th:each="dto3:${naver}"  th:if="${dto2.orgUnitId eq dto3.parentOrgUnitId}">
+							<a th:text="${dto3.orgUnitName}"></a>
+						</li>
+					</ul>
+				</li>
+			</ol>
+		</li>
+	</ul>
 </body>
 </html>

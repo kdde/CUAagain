@@ -50,16 +50,17 @@ public class NaverApiController {
 		}
 		con.disconnect();
 		//*/
-		//System.out.println(responseJSONCode); JSON 형식 문자열데이터
-		ObjectMapper mapper = new ObjectMapper();
+		//System.out.println(responseData); JSON 형식 문자열데이터
+		ObjectMapper mapper=new ObjectMapper();
 		
-		NaverTokenDTO dto = mapper.readValue(responseJSONData, NaverTokenDTO.class);
+		NaverTokenDTO dto=mapper.readValue(responseJSONData, NaverTokenDTO.class);
 		System.out.println(dto);
-		
 		OrgResponse orgResponse=getOrgUnit(dto);
-		System.out.println("-------------------");
+		//getOrgUnit(responseJSONData);
+		//System.out.println(">>>:"+responseJSONData);
+		System.out.println("====================");
 		System.out.println(orgResponse);
-		model.addAttribute("list", orgResponse.getOrgUnits());//부서정보
+		model.addAttribute("naver", orgResponse.getOrgUnits());
 		return "naver/naver-auth2";
 	}
 	
@@ -72,11 +73,11 @@ public class NaverApiController {
 	//}
 
 	private OrgResponse getOrgUnit(NaverTokenDTO dto) throws IOException {
-		String apiURL = "https://www.worksapis.com/v1.0/orgunits";
-		apiURL += "?domainId=300065308";
+		String apiURL="https://www.worksapis.com/v1.0/orgunits";
+		apiURL +="?domainId=300065308";
+		
 		
 		URL url=new URL(apiURL);
-		
 		HttpURLConnection con=(HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		//"Bearer {token}"
@@ -86,16 +87,17 @@ public class NaverApiController {
 		String responseJSONData=null;
 		if(responseCode == HttpURLConnection.HTTP_OK) {
 			responseJSONData=readBody(con.getInputStream());
-			System.out.println(">>>>정상");
+			System.out.println(">>>정상");
 		}else {
 			responseJSONData=readBody(con.getErrorStream());
-			System.out.println(">>>>에러");
+			System.out.println(">>>에러");
 		}
 		con.disconnect();
 		//System.out.println(responseJSONData);
-		ObjectMapper mapper = new ObjectMapper();
-		OrgResponse response = mapper.readValue(responseJSONData, OrgResponse.class);
-		return response;
+		ObjectMapper mapper=new ObjectMapper();
+		OrgResponse reponse=mapper.readValue(responseJSONData, OrgResponse.class);
+		return reponse;
+		
 	}
 
 	//응답데이터를 스트림을 통해서 한줄씩읽어서 문자열로 리턴
