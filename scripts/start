@@ -5,7 +5,7 @@ APP_BASE="/home/ec2-user/src/webapp"
 DEPLOY_PATH="/home/ec2-user/src/deploy"
 DEPLOY_LOG="$TOMCAT_ROOT/deploy.log"
 DATE=`date +"[%Y-%m-%d %H:%M:%S]"`
-WAR_FILE="CodeBox.war"
+WAR_FILE="CUAgain.war"
 
 #배포된 war파일을 tomcat_web_root 경로에 앞축해제
 cp -f $DEPLOY_PATH/build/libs/$WAR_FILE  $APP_BASE
